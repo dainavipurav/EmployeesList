@@ -23,6 +23,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/material_dimen_ldpi"
+        android:layout_marginTop="@dimen/material_dimen_mdpi"
         android:padding="@dimen/material_dimen_ldpi"
         android:textSize="15sp"
         app:layout_constraintStart_toStartOf="parent"
