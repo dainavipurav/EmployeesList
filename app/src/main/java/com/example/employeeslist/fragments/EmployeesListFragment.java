@@ -63,6 +63,8 @@ public class EmployeesListFragment extends Fragment {
     ConstraintLayout mConstraintLayoutEmployeesList;
     RecyclerView mRecyclerViewEmployeesList;
     TextView mTextViewEmployeesListUserCurrentLocation;
+    TextView mTextViewEmployeesListNoDataFound;
+
     List<EmployeesDetailsModel> mEmployeesDetailsModelList;
 
     EmployeesListAdapter mEmployeesListAdapter;
@@ -98,34 +100,36 @@ public class EmployeesListFragment extends Fragment {
 
         mConstraintLayoutEmployeesList = view.findViewById(R.id.constraintLayoutEmployeesList);
         mRecyclerViewEmployeesList = view.findViewById(R.id.recyclerViewEmployeesList);
+        mTextViewEmployeesListNoDataFound = view.findViewById(R.id.textViewEmployeesListNoDataFound);
         mTextViewEmployeesListUserCurrentLocation = view.findViewById(R.id.textViewEmployeesListUserCurrentLocation);
 
-        mGeoCoder = new Geocoder(getContext(), Locale.getDefault());
 
-        isConnected=isNetWorkConnected();
+        progressDialog = new ProgressDialog(this.getActivity());
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.show();
 
-        if (isConnected){
-            progressDialog = new ProgressDialog(this.getActivity());
-            progressDialog.setMessage("Please Wait...");
-            progressDialog.show();
+        isConnected = isNetWorkConnected();
+
+        if (isConnected) {
+            progressDialog.dismiss();
             getLocation();
             getAPIData();
-        }
-        else {
+        } else {
             progressDialog.dismiss();
             Toast.makeText(
                     getContext(),
                     "Connection Error : Please Connect to the internet.",
                     Toast.LENGTH_SHORT
             ).show();
+            /*mRecyclerViewEmployeesList.setVisibility(View.INVISIBLE);
+            mTextViewEmployeesListUserCurrentLocation.setVisibility(View.VISIBLE);
+            mTextViewEmployeesListNoDataFound.setVisibility(View.INVISIBLE);*/
         }
-
-
 
 
     }
 
-    private Boolean isNetWorkConnected(){
+    private Boolean isNetWorkConnected() {
         if (
                 mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED ||
                         mConnectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
@@ -147,14 +151,20 @@ public class EmployeesListFragment extends Fragment {
                 mResponseModel = response.body();
                 if (mResponseModel != null) {
                     if (mResponseModel.getStatus().equals("success")) {
+                        mRecyclerViewEmployeesList.setVisibility(View.VISIBLE);
+                        mTextViewEmployeesListNoDataFound.setVisibility(View.INVISIBLE);
                         mEmployeesDetailsModelList = mResponseModel.getData();
                         mEmployeesListAdapter = new EmployeesListAdapter(mEmployeesDetailsModelList, getContext());
                         mRecyclerViewEmployeesList.setAdapter(mEmployeesListAdapter);
                     } else {
                         Toast.makeText(getActivity(), "No Data found", Toast.LENGTH_SHORT).show();
+                        mRecyclerViewEmployeesList.setVisibility(View.INVISIBLE);
+                        mTextViewEmployeesListNoDataFound.setVisibility(View.VISIBLE);
                     }
                 } else {
                     Toast.makeText(getActivity(), "No Data found", Toast.LENGTH_SHORT).show();
+                    mRecyclerViewEmployeesList.setVisibility(View.INVISIBLE);
+                    mTextViewEmployeesListNoDataFound.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -162,6 +172,8 @@ public class EmployeesListFragment extends Fragment {
             @Override
             public void onFailure(Call<ResponseModel> call, Throwable t) {
                 Toast.makeText(getActivity(), t.toString(), Toast.LENGTH_SHORT).show();
+                mRecyclerViewEmployeesList.setVisibility(View.INVISIBLE);
+                mTextViewEmployeesListNoDataFound.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -186,9 +198,11 @@ public class EmployeesListFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CODE_LOCATION_PERMISSION && grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mTextViewEmployeesListUserCurrentLocation.setVisibility(View.VISIBLE);
                 getCurrentLocation();
             } else {
                 Toast.makeText(getContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+                mTextViewEmployeesListUserCurrentLocation.setVisibility(View.INVISIBLE);
             }
         }
     }
@@ -198,6 +212,8 @@ public class EmployeesListFragment extends Fragment {
         mLocationRequest.setInterval(10000);
         mLocationRequest.setFastestInterval(3000);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        mGeoCoder = new Geocoder(getContext(), Locale.getDefault());
 
         addresses = new ArrayList<>();
 

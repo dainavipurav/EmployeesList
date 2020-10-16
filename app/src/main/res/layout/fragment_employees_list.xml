@@ -11,12 +11,28 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewEmployeesList"
         android:layout_width="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@id/textViewEmployeesListUserCurrentLocation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewEmployeesListNoDataFound"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/material_dimen_ldpi"
+        android:layout_marginTop="@dimen/material_dimen_mdpi"
+        android:gravity="center"
+        android:padding="@dimen/material_dimen_ldpi"
+        android:text="@string/text_string_no_data_found"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@id/recyclerViewEmployeesList"
+        app:layout_constraintEnd_toEndOf="@id/recyclerViewEmployeesList"
+        app:layout_constraintStart_toStartOf="@id/recyclerViewEmployeesList"
+        app:layout_constraintTop_toTopOf="@id/recyclerViewEmployeesList" />
 
     <TextView
         android:id="@+id/textViewEmployeesListUserCurrentLocation"
@@ -26,9 +42,9 @@
         android:layout_marginTop="@dimen/material_dimen_mdpi"
         android:padding="@dimen/material_dimen_ldpi"
         android:textSize="15sp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/recyclerViewEmployeesList"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewEmployeesList" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
