@@ -1,0 +1,14 @@
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <string name="app_name">EmployeesList</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="api_response_result"><b>Name : </b><xliff:g example="name:" id="name">%s</xliff:g>\n<b>Salary : </b><xliff:g example="Salary" id="salary">%s</xliff:g>\n<b>Age : </b><xliff:g example="Age" id="age">%s</xliff:g>
+    </string>
+
+    <string name="my_current_location"><b>Current Location : \n</b><xliff:g example="name:" id="name">%s</xliff:g>
+    </string>
+
+    <string name="string_title_current_location">Current Location:</string>
+</resources>
